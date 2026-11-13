@@ -1,0 +1,18 @@
+{
+  "source": "Owner-provided Agent Games practice result screenshots",
+  "platformScored": false,
+  "taskId": "practice_349741b4-16c1-4ecf-aa4b-847aa2e5e236",
+  "issuedAt": "2026-11-13T17:18:51.530Z",
+  "deadlineAt": "2026-11-13T17:19:06.530Z",
+  "case": "AMOUNT_OVERFLOW",
+  "submitted": "REJECT",
+  "expected": "REJECT",
+  "reasonCode": "AMOUNT_OVERFLOW",
+  "proofStatus": "VERIFIED",
+  "latencyMs": 2599,
+  "requestWindowMs": 15000,
+  "amount": "1800",
+  "maxTransfer": "1000",
+  "practiceReferenceIsTaskUuid": true,
+  "platformNotice": "Practice proofs aren't submitted to the chain — competition tasks generate on-chain attestations."
+}

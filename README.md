@@ -12,6 +12,8 @@ On 13 November 2026, the owner confirmed **platform preflight passed** and a rea
 
 This is an agent for the tournament's signed task envelopes, not a production payment authorization service. It never transfers funds. The current task contract provides a proof transaction reference and claimed condition fields, but does not document an authenticated chain lookup response or incoming public-input extraction. Independent validation of that incoming chain reference is **not implemented**. Do not treat the resulting circuit proof as evidence that the incoming transaction was finalized. Output proofs are returned to the competition platform for independent verification; this deployment does not submit separate Kurier transactions or claim they are finalized.
 
+Additional platform practice evidence on 13 November: `AMOUNT_OVERFLOW` returned the expected `REJECT`, with a verified proof in 2,599 ms. Its envelope allowed 15 seconds. The practice detail explicitly says practice proofs are not submitted to the chain, while competition tasks generate on-chain attestations. This observed practice reference is `0x` plus the task UUID without hyphens (16 bytes), not a normal 32-byte chain transaction hash. Do not require an on-chain lookup of this synthetic practice reference. This observation does not establish the format or verification requirements of incoming competition references. See [`reports/platform-practice.json`](reports/platform-practice.json).
+
 ## Run locally
 
 Node 22 or newer:
