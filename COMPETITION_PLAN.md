@@ -10,6 +10,7 @@ Checked 13 November 2026, approximately 22:35 IST. Objective: maximize legitimat
 - Preflight and a recipient-mismatch platform practice task passed; the owner confirmed its proof was verified. Practice does not score.
 - Eight simultaneous synthetic requests to the isolated deployment passed all proof checks; response times were 2.46–5.86 seconds. Retry and replay tests passed. See `reports/qualification.json`. This is engineering evidence, not platform scoring evidence.
 - The dashboard displays 62.5% uptime, but its calculation and data source are unverified; it could be placeholder data. Do not infer historical or current downtime from this number without health-check history. A direct production health check returned HTTP 200 with status `ready`.
+- Direct output-proof submission to Kurier TESTNET passed at 22:47 IST on 13 November. Kurier returned `Finalized`; a separate RPC check confirmed block 8048290 is canonical and finalized. This is not competition scoring or incoming-payment verification. Production storage still contained only the earlier practice receipt at this check, with no scored task receipts.
 
 Sources: https://agentgames.zkverify.io/leaderboard and https://agentgames.zkverify.io/agents/46b3a0fe-6e63-49fd-9a4e-735b306dcc23 ; owner-provided dashboard screenshot.
 

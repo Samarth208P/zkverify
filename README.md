@@ -29,7 +29,7 @@ Local development uses in-memory replay state. Netlify uses strongly consistent 
 
 ## Test direct zkVerify submission
 
-The standalone Kurier client implements real submission and bounded finalization polling. It is not connected to the scored HTTP handler: a slow or unavailable external service must not silently change its competition behavior. Live testnet validation requires the owner's testnet API key; mocked tests alone do not establish on-chain success.
+The standalone Kurier client implements real submission and bounded finalization polling. It is not connected to the scored HTTP handler: a slow or unavailable external service must not silently change its competition behavior. **Live testnet validation passed on 13 November 2026:** the official-circuit proof verified locally, Kurier returned `Finalized`, and a separate public testnet RPC check confirmed the returned block is canonical and finalized. Evidence: [`reports/kurier-testnet.json`](reports/kurier-testnet.json). The RPC block check does not independently decode the proof transaction; transaction verification status comes from Kurier.
 
 1. Sign up at https://testnet.kurier.xyz/ and complete email verification if requested.
 2. Put the TESTNET key in the ignored local `.env` as `KURIER_API_KEY=...`. Do not paste it into chat or commit it.

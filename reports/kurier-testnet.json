@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-11-13T17:17:20.705Z",
+  "platformScored": false,
+  "network": "testnet",
+  "jobId": "075395a0-df86-11f1-bb46-22f5290c9c2d",
+  "status": "Finalized",
+  "txHash": "0xdccbc08b6457bc650f2a890ae024e35ead4f6fb48f4280af6cc5c252cee409c3",
+  "blockHash": "0x99681d5b658a645023999ca0ec4478e084a72ace6765462dfd51ee84a1f22f49",
+  "rpcBlockCheck": {
+    "checkedAt": "2026-11-13T17:17:53.784Z",
+    "blockNumber": 8048290,
+    "finalizedHeadNumber": 8048295,
+    "canonicalAndFinalized": true
+  }
+}
