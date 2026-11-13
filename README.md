@@ -8,7 +8,7 @@ Endpoint: `https://astrex-1-zkverify.netlify.app/agent`
 
 Implements signed preflight, deterministic checks, official Groth16 decision proofs, immutable task receipts, and persistent proof replay protection.
 
-On 13 November 2026, the owner confirmed **platform preflight passed** and a real recipient-mismatch practice task returned **Correct decision / Proof verified**. Ten automated local tests pass. An isolated deployed smoke test also passed authentication, real proof generation and verification (about 2.25 seconds), idempotent retries, and persistent replay rejection. This establishes a working integration, not complete scored-round coverage; other practice trap types still need platform validation.
+On 13 November 2026, the owner confirmed **platform preflight passed** and a real recipient-mismatch practice task returned **Correct decision / Proof verified**. Sixteen automated local tests pass, including real circuit proofs and mocked Kurier protocol tests. An isolated deployed smoke test also passed authentication, real proof generation and verification (about 2.25 seconds), idempotent retries, and persistent replay rejection. This establishes a working integration, not complete scored-round coverage; other practice trap types still need platform validation.
 
 This is an agent for the tournament's signed task envelopes, not a production payment authorization service. It never transfers funds. The current task contract provides a proof transaction reference and claimed condition fields, but does not document an authenticated chain lookup response or incoming public-input extraction. Independent validation of that incoming chain reference is **not implemented**. Do not treat the resulting circuit proof as evidence that the incoming transaction was finalized. Output proofs are returned to the competition platform for independent verification; this deployment does not submit separate Kurier transactions or claim they are finalized.
 
@@ -26,6 +26,19 @@ npm run dev
 ```
 
 Local development uses in-memory replay state. Netlify uses strongly consistent site-wide Blobs with create-only claims. Practice and competition have separate namespaces; preview deployments are isolated from production. A reserved proof remains reserved after an interrupted request, preventing unsafe reuse. Retries by the original task can resume.
+
+## Test direct zkVerify submission
+
+The standalone Kurier client implements real submission and bounded finalization polling. It is not connected to the scored HTTP handler: a slow or unavailable external service must not silently change its competition behavior. Live testnet validation requires the owner's testnet API key; mocked tests alone do not establish on-chain success.
+
+1. Sign up at https://testnet.kurier.xyz/ and complete email verification if requested.
+2. Put the TESTNET key in the ignored local `.env` as `KURIER_API_KEY=...`. Do not paste it into chat or commit it.
+3. Run `npm run verify:testnet`. It generates an isolated synthetic official-circuit proof, verifies it locally, submits the full VK to testnet, and waits for `Finalized` with transaction and block hashes.
+4. A successful live result is saved to `reports/kurier-testnet.json`. No report is generated on failure. This earns no Agent Games points and proves only the output decision proof's testnet verification, not the incoming payment reference's authenticity.
+
+The official published registered key hash is for mainnet; the testnet smoke test deliberately submits the full verification key instead. HTTP errors, failed optimistic verification, mismatched jobs, missing finalized hashes, and timeouts are errors. API keys are never logged, and redirects are refused. POST requests are not automatically retried because an ambiguous response may already represent a submitted job.
+
+Sources: [Kurier tutorial](https://docs.zkverify.io/overview/getting-started/kurier), [live API schema](https://api.kurier.xyz/docs/json).
 
 ## Deploy and connect
 

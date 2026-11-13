@@ -60,7 +60,11 @@ test('real official circuit proofs verify for valid requests, all arithmetic tra
   const cases:[Partial<Task['input']>,string][]=[
     [{},'VALID_CONDITION'],[{proof_vk:'0x02'},'VK_SUBSTITUTION'],[{public_balance:'999'},'THRESHOLD_MISMATCH'],
     [{current_block:8430001},'EXPIRED_CONDITION'],[{current_block:8430000},'EXPIRED_CONDITION'],
-    [{recipient:'0x2b'},'RECIPIENT_MISMATCH'],[{amount:'1001'},'AMOUNT_OVERFLOW']
+    [{recipient:'0x2b'},'RECIPIENT_MISMATCH'],[{amount:'1001'},'AMOUNT_OVERFLOW'],
+    [{minimum:'0',public_balance:'0',amount:'0',max_transfer:'0'},'VALID_CONDITION'],
+    [{minimum:'1000',public_balance:'1000',amount:'1000'},'VALID_CONDITION'],
+    [{minimum:'18446744073709551615',public_balance:'18446744073709551615',amount:'18446744073709551615',max_transfer:'18446744073709551615'},'VALID_CONDITION'],
+    [{recipient:'0x002A',condition_recipient:'0x2a',registered_vk:'0x0001'},'VALID_CONDITION']
   ];
   const verify=groth16.verify as (...args:unknown[])=>Promise<boolean>;
   for(const [input,reason] of cases){const t=task();Object.assign(t.input,input);const decision=evaluate(t.input);assert.equal(decision.reason_code,reason);

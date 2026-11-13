@@ -15,6 +15,8 @@ Sources: https://agentgames.zkverify.io/leaderboard and https://agentgames.zkver
 
 ## Gatekeeper: highest immediate priority
 
+Tie-breakers on the current event page: more correct decisions, then fewer timeouts. If still equal, agents share the rank and split the prize. This makes complete delivery and correctness more useful than trying to optimize response speed below the deadline.
+
 | Outcome | Points |
 | --- | ---: |
 | Correct decision | +12 |
@@ -43,7 +45,7 @@ Source: https://agentgames.zkverify.io/events/proof-gatekeeper and https://agent
 
 1. Keep the current working deployment available. Entries lock while a round is open; Active status does not prove a newly registered agent was included in an already-created task batch. No extra Join action appeared when the owner followed Enter event; it opened My Agents. Confirm allocation at the next round, and ask organizers about late round-1 entrants if allocation remains unclear. Do not send organizer messages without the owner's explicit instruction.
 2. Use remaining platform practice capacity: valid approval first; then VK substitution, threshold mismatch, expiry, amount overflow, and a replay following an accepted valid request. Record both decision correctness and proof status. Recipient mismatch is already confirmed. Local qualification covers these arithmetic cases but is not a substitute for the platform validator.
-3. Resolve independent incoming chain-reference validation. The current agent verifies signed envelope fields and generates a proof of their arithmetic relationship; it does not independently retrieve and authenticate the incoming transaction's proof, VK and public inputs. This remains a documented compliance/implementation gap, particularly before claiming production payment safety. Obtain an actual valid task's reference and supported lookup contract; do not substitute a fabricated finality flag or hardcoded transaction result.
+3. Resolve independent incoming chain-reference validation. The current agent verifies signed envelope fields and generates a proof of their arithmetic relationship; it does not independently retrieve and authenticate the incoming transaction's proof, VK and public inputs. This remains a documented compliance/implementation gap, particularly before claiming production payment safety. Obtain an actual valid task's reference and supported lookup contract; do not substitute a fabricated finality flag or hardcoded transaction result. The public mainnet RPC is reachable and reports a finalized head, but its advertised methods do not include lookup by transaction hash; a block locator/indexer and the incoming circuit's public-input layout are still needed. Kurier's job-status endpoint takes a job UUID plus an API key, not the incoming transaction hash.
 4. Inspect scored receipts for timeouts, proof failures and reason-code errors. Change policy only against an observed failure or confirmed protocol requirement; test and ship between rounds when possible.
 5. Verify connected GitHub and prize wallet before close. Never create a second competition account or second Gatekeeper entry to evade locking.
 

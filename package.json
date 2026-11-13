@@ -10,7 +10,8 @@
     "test": "node --import tsx --test test/*.test.ts",
     "typecheck": "tsc --noEmit",
     "build": "npm run typecheck",
-    "dev": "node --env-file-if-exists=.env --import tsx src/server.ts"
+    "dev": "node --env-file-if-exists=.env --import tsx src/server.ts",
+    "verify:testnet": "node --env-file-if-exists=.env --import tsx scripts/verify-onchain.ts"
   },
   "dependencies": {
     "@netlify/blobs": "^11.1.9",
