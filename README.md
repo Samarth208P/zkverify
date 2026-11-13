@@ -6,7 +6,9 @@ Endpoint: `https://astrex-1-zkverify.netlify.app/agent`
 
 ## Status
 
-Implements signed preflight, deterministic checks, official Groth16 decision proofs, immutable task receipts, and persistent proof replay protection. Platform preflight and practice acceptance must be confirmed before calling this competition-ready.
+Implements signed preflight, deterministic checks, official Groth16 decision proofs, immutable task receipts, and persistent proof replay protection.
+
+On 13 November 2026, the owner confirmed **platform preflight passed** and a real recipient-mismatch practice task returned **Correct decision / Proof verified**. Ten automated local tests pass. An isolated deployed smoke test also passed authentication, real proof generation and verification (about 2.25 seconds), idempotent retries, and persistent replay rejection. This establishes a working integration, not complete scored-round coverage; other practice trap types still need platform validation.
 
 This is an agent for the tournament's signed task envelopes, not a production payment authorization service. It never transfers funds. The current task contract provides a proof transaction reference and claimed condition fields, but does not document an authenticated chain lookup response or incoming public-input extraction. Independent validation of that incoming chain reference is **not implemented**. Do not treat the resulting circuit proof as evidence that the incoming transaction was finalized. Output proofs are returned to the competition platform for independent verification; this deployment does not submit separate Kurier transactions or claim they are finalized.
 
@@ -40,7 +42,7 @@ The deployment contains only `public/` and the packaged function. Secrets, logs,
 - HMAC-SHA256 is verified over raw request bytes before parsing JSON. The guide does not specify whether the 64-character secret is used as text or decoded hex. The handler recognizes either sender convention and signs the response with the matched encoding and header prefix.
 - The official circuit inputs were checked against the downloaded WASM: `registeredVkHash`, `proofVkHash`, `minimum`, `publicBalance`, `expiryBlock`, `currentBlock`, `recipient`, `conditionRecipient`, `amount`, `maxTransfer`, `decision`, `taskId`, `salt`.
 - The circuit requires **expiryBlock > currentBlock**. Equality is a rejection. This was confirmed by actual proof tests.
-- Hex fields are converted to integers modulo the BN254 field. The task ID uses SHA-256(UTF-8) modulo that field; the private salt is derived with domain-separated HMAC. **These serialization choices are not specified by the public guide and still need platform practice confirmation.** We never modify task values to force a proof to pass.
+- Hex fields are converted to integers modulo the BN254 field. The task ID uses SHA-256(UTF-8) modulo that field; the private salt is derived with domain-separated HMAC. These serialization choices are not specified by the public guide. The initial recipient-mismatch practice proof was accepted by the platform; additional cases should still be checked. We never modify task values to force a proof to pass.
 - Public signals: `[commitment, registeredVkHash, proofVkHash, minimum, publicBalance, expiryBlock, currentBlock, recipient, conditionRecipient, amount, maxTransfer, decision, taskId]`. Salt is private.
 - The supplied circuit has no replay-state input. A `PROOF_REUSED` response intentionally has no fabricated Groth16 proof. Confirm how the platform scores this non-arithmetic rejection.
 - Valid proof generation is tested, not just response structure. Tampering with a public decision makes verification fail.

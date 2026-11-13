@@ -36,13 +36,13 @@ export function createAgent(options: Options) {
     if(request.method==='GET'||request.method==='HEAD') {
       let ready=options.secret.length>=32;
       try{await (options.checkArtifacts??artifactsAvailable)();}catch{ready=false;}
-      return plain({ok:ready,agent:'Astrex-1',protocolVersion:'v1',track:'proof-gatekeeper',status:ready?'awaiting_platform_validation':'configuration_required',competition_validated:false},ready?200:503);
+      return plain({ok:ready,agent:'Astrex-1',protocolVersion:'v1',track:'proof-gatekeeper',status:ready?'ready':'configuration_required'},ready?200:503);
     }
     if(request.method!=='POST')return new Response(null,{status:405,headers:{...headers,allow:'GET, HEAD, POST'}});
     if(options.secret.length<32)return plain({error:'AGENT_NOT_CONFIGURED'},503);
     let raw:Buffer;try{raw=await readBody(request);}catch{return plain({error:'BODY_TOO_LARGE'},413);}
     const auth=authenticate(raw,request.headers.get('x-agent-games-signature')??'',options.secret);
-    if(!auth)return plain({error:'INVALID_SIGNATURE'},401);
+    if(!auth){console.info(JSON.stringify({event:'request_rejected',reason:'INVALID_SIGNATURE'}));return plain({error:'INVALID_SIGNATURE'},401);}
     const signed=(data:unknown,status=200)=>{
       const body=JSON.stringify(data);
       return new Response(body,{status,headers:{...headers,'x-agent-games-signature':auth.prefix+createHmac('sha256',auth.key).update(body).digest('hex')}});
@@ -51,6 +51,7 @@ export function createAgent(options: Options) {
     const now=options.now??Date.now;
     if(data.type==='agent-games.preflight.v1') {
       if(typeof data.issued_at!=='string'||!Number.isFinite(Date.parse(data.issued_at))||Math.abs(now()-Date.parse(data.issued_at))>120_000||typeof data.nonce!=='string'||!data.nonce||typeof data.agent_id!=='string')return signed({error:'INVALID_PREFLIGHT'},400);
+      console.info(JSON.stringify({event:'preflight_passed'}));
       return signed({ok:true,protocolVersion:'v1'});
     }
     if(data.type!=='agent-games.proof-gatekeeper.v1')return signed({error:'UNSUPPORTED_TASK_TYPE'},400);
@@ -61,7 +62,8 @@ export function createAgent(options: Options) {
     try {
       const prior=await options.store.get<Receipt>(`${key}/result`);
       if(prior)return prior.bodyHash===bodyHash?signed(prior.reply):signed({error:'TASK_ID_CONFLICT'},409);
-      const claimed=await options.store.create(`${key}/request`,{bodyHash});
+      // Retain only the parsed task, never its HMAC header or deployment credentials.
+      const claimed=await options.store.create(`${key}/request`,{bodyHash,task});
       if(!claimed){const priorRequest=await options.store.get<{bodyHash:string}>(`${key}/request`);if(priorRequest?.bodyHash!==bodyHash)return signed({error:'TASK_ID_CONFLICT'},409);}
       let decision=evaluate(task.input);
       if(decision.decision==='APPROVE') {
