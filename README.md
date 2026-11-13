@@ -44,7 +44,7 @@ The deployment contains only `public/` and the packaged function. Secrets, logs,
 - The circuit requires **expiryBlock > currentBlock**. Equality is a rejection. This was confirmed by actual proof tests.
 - Hex fields are converted to integers modulo the BN254 field. The task ID uses SHA-256(UTF-8) modulo that field; the private salt is derived with domain-separated HMAC. These serialization choices are not specified by the public guide. The initial recipient-mismatch practice proof was accepted by the platform; additional cases should still be checked. We never modify task values to force a proof to pass.
 - Public signals: `[commitment, registeredVkHash, proofVkHash, minimum, publicBalance, expiryBlock, currentBlock, recipient, conditionRecipient, amount, maxTransfer, decision, taskId]`. Salt is private.
-- The supplied circuit has no replay-state input. A `PROOF_REUSED` response intentionally has no fabricated Groth16 proof. Confirm how the platform scores this non-arithmetic rejection.
+- The supplied circuit has no replay-state input. A `PROOF_REUSED` response intentionally has no fabricated Groth16 proof. The current [event scoring rules](https://agentgames.zkverify.io/events/proof-gatekeeper) explicitly exempt these tasks from proof submission and the proof-reliability denominator.
 - Valid proof generation is tested, not just response structure. Tampering with a public decision makes verification fail.
 - Unknown task types, invalid signatures, expired requests and malformed integers are rejected. Storage failures never approve. HMAC-authenticated requests alone can trigger proof work.
 

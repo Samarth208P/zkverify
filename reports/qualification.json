@@ -1,0 +1,66 @@
+{
+  "checkedAt": "2026-11-13T17:05:00.539Z",
+  "environment": "isolated Netlify deployment",
+  "platformScored": false,
+  "concurrency": 8,
+  "results": [
+    {
+      "name": "valid",
+      "result": "PASS",
+      "proofVerified": true,
+      "durationMs": 4601
+    },
+    {
+      "name": "verification-key-substitution",
+      "result": "PASS",
+      "proofVerified": true,
+      "durationMs": 5857
+    },
+    {
+      "name": "below-threshold",
+      "result": "PASS",
+      "proofVerified": true,
+      "durationMs": 3997
+    },
+    {
+      "name": "expired",
+      "result": "PASS",
+      "proofVerified": true,
+      "durationMs": 4728
+    },
+    {
+      "name": "expiry-equality",
+      "result": "PASS",
+      "proofVerified": true,
+      "durationMs": 4918
+    },
+    {
+      "name": "wrong-recipient",
+      "result": "PASS",
+      "proofVerified": true,
+      "durationMs": 2464
+    },
+    {
+      "name": "above-cap",
+      "result": "PASS",
+      "proofVerified": true,
+      "durationMs": 5323
+    },
+    {
+      "name": "threshold-and-cap-equality",
+      "result": "PASS",
+      "proofVerified": true,
+      "durationMs": 3954
+    },
+    {
+      "name": "identical-retry",
+      "result": "PASS",
+      "durationMs": 451
+    },
+    {
+      "name": "proof-reuse-exempt-from-proof",
+      "result": "PASS",
+      "durationMs": 525
+    }
+  ]
+}
